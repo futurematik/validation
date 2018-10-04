@@ -6,6 +6,7 @@ export * from './combine';
 export * from './date';
 export * from './integer';
 export * from './is';
+export * from './model';
 export * from './notProvided';
 export * from './optional';
 export * from './password';
