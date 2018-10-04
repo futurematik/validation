@@ -4,6 +4,7 @@ export * from './base';
 export * from './bool';
 export * from './combine';
 export * from './date';
+export * from './email';
 export * from './integer';
 export * from './is';
 export * from './model';
