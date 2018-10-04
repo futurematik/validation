@@ -35,6 +35,6 @@ export function formatPasswordResult(result: zxcvbn.ZXCVBNResult): string {
     `can be cracked in ${
       result.crack_times_display.online_no_throttling_10_per_second
     }`;
-  const score = Math.min(10 * result.guesses_log10, 100);
+  const score = Math.round(Math.min(10 * result.guesses_log10, 100));
   return `${score}% ` + warning + suggestion;
 }
