@@ -6,7 +6,7 @@ import {
 } from './base';
 import { UnexpectedField } from './notProvided';
 
-const ExpectedObject = 'EXPECTED_OBJECT';
+export const ExpectedObject = 'EXPECTED_OBJECT';
 
 /**
  * ModelDefinition is a type containing validators for all properties of a given
