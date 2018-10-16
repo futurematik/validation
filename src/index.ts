@@ -11,5 +11,6 @@ export * from './model';
 export * from './notProvided';
 export * from './optional';
 export * from './password';
+export * from './real';
 export * from './text';
 export * from './ukmobile';
