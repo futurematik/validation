@@ -32,7 +32,10 @@ export function text(
       return [
         {
           id: StringTooShort,
-          text: `must be at least ${minLength} characters`,
+          text:
+            minLength === 1
+              ? `required`
+              : `must be at least ${minLength} characters`,
           field: ctx.field,
         },
       ];

@@ -17,7 +17,7 @@ export function password(minScore: number = 3): ValueValidator<string> {
     return [
       {
         id: ExpectedSecurePassword,
-        text: formatPasswordResult(result),
+        text: ctx.value ? formatPasswordResult(result) : 'required',
         field: ctx.field,
         extra: result,
       },
