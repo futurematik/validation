@@ -5,7 +5,7 @@ export const ExpectedInteger = 'EXPECTED_INTEGER';
 /**
  * Require an integer value.
  */
-export function integer(coerceStrings?: true): ValueValidator<number> {
+export function integer(coerceStrings?: boolean): ValueValidator<number> {
   return ctx => {
     let value: any = ctx.value;
     if (coerceStrings && typeof value === 'string') {
