@@ -18,17 +18,22 @@ export interface ValidationError {
 }
 
 /**
+ * ValidationOptions control a validation operation.
+ */
+export interface ValidationOptions {
+  json?: boolean;
+  noCoerce?: boolean;
+  arraySplit?: string;
+  permissive?: boolean;
+}
+
+/**
  * ValidationContext describes a value to be validated.
  */
 export interface ValidationContext<T> {
   field?: string;
   value: T;
-  options?: {
-    json?: boolean;
-    noCoerce?: boolean;
-    arraySplit?: string;
-    permissive?: boolean;
-  };
+  options?: ValidationOptions;
 }
 
 /**
@@ -42,14 +47,22 @@ export type ValueValidator<T> = (
 /**
  * Wrap a validate call to throw an error if validation errors found.
  */
-export function assertValid<T>(value: T, validator: ValueValidator<T>): void;
+export function assertValid<T>(
+  value: T,
+  validator: ValueValidator<T>,
+  options?: ValidationOptions & { field?: string },
+): void;
 export function assertValid(errs: ValidationError[]): void;
 export function assertValid<T>(
   value: ValidationError[] | T,
   validator?: ValueValidator<T>,
+  options?: ValidationOptions & { field?: string },
 ) {
+  options = options || {};
+  const { field, ...opts } = options;
+
   if (validator) {
-    value = validator({ value: <T>value });
+    value = validator({ value: <T>value, field, options: opts });
   } else if (!Array.isArray(value)) {
     throw new Error('expected an array of validation errors');
   }
