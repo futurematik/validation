@@ -3,14 +3,17 @@ import { ValueValidator } from './base';
 export const UnexpectedField = 'UNEXPECTED_FIELD';
 
 /**
- * Require value not to be present. Best used with or().
+ * Require value not to be present.
  */
-export function notProvided(): ValueValidator<undefined> {
+export function notProvided(opts?: {
+  strict?: boolean;
+}): ValueValidator<undefined> {
   return ctx => {
-    let options = ctx.options || {};
-    let { noCoerce, permissive } = options;
+    const options = ctx.options || {};
+    const { noCoerce } = options;
+    const strict = opts && opts.strict;
 
-    if ((permissive && ctx.value == undefined) || ctx.value === undefined) {
+    if ((!strict && ctx.value == undefined) || ctx.value === undefined) {
       if (!noCoerce) {
         ctx.value = undefined;
       }
