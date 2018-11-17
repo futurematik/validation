@@ -5,20 +5,25 @@ export const ExpectedInteger = 'EXPECTED_INTEGER';
 /**
  * Require an integer value.
  */
-export function integer(coerceStrings?: boolean): ValueValidator<number> {
+export function integer(): ValueValidator<number> {
   return ctx => {
     let value: any = ctx.value;
-    if (coerceStrings && typeof value === 'string') {
+    let options = ctx.options || {};
+    let { noCoerce, permissive } = options;
+
+    if (permissive && typeof value === 'string') {
       value = +value;
     }
     if (Number.isInteger(<any>value)) {
-      ctx.value = value;
+      if (!noCoerce) {
+        ctx.value = value;
+      }
       return [];
     }
     return [
       {
         id: ExpectedInteger,
-        text: `expected integer`,
+        text: `expected number`,
         field: ctx.field,
       },
     ];

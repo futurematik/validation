@@ -7,12 +7,17 @@ export const ExpectedUkMobile = 'EXPECTED_UK_MOBILE';
  */
 export function ukmobile(): ValueValidator<string> {
   return ctx => {
+    let options = ctx.options || {};
+    let { noCoerce } = options;
+
     if (typeof ctx.value === 'string') {
       const value = ctx.value.replace(/[ \.\-\(\)]/g, '');
       const match = value.match(/^(\+44)?0?(7[0-9]{9})$/);
 
       if (match !== null) {
-        ctx.value = '+44' + match[2];
+        if (!noCoerce) {
+          ctx.value = '+44' + match[2];
+        }
         return [];
       }
     }

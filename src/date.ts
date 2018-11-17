@@ -10,20 +10,28 @@ export function dateFormat(
   format: string | moment.MomentBuiltinFormat,
 ): ValueValidator<Date> {
   return ctx => {
+    let options = ctx.options || {};
+    let { json, noCoerce } = options;
+
     if (ctx.value instanceof Date) {
       return [];
     }
     if (typeof ctx.value === 'string') {
       let m = moment(ctx.value, format, true);
       if (m.isValid()) {
-        ctx.value = m.toDate();
+        if (!noCoerce && !json) {
+          ctx.value = m.toDate();
+        }
         return [];
       }
     }
     return [
       {
         id: ExpectedDateFormat,
-        text: `expected a date with format ${format}`,
+        text:
+          `expected a date` + typeof format === 'string'
+            ? ` with format ${format}`
+            : ``,
         field: ctx.field,
       },
     ];

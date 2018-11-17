@@ -57,6 +57,8 @@ export function properties<T>(
 ): ValueValidator<T> {
   return ctx => {
     let errors: ValidationError[] = [];
+    let options = ctx.options || {};
+    let { noCoerce } = options;
 
     if (typeof ctx.value !== 'object') {
       return [
@@ -75,6 +77,7 @@ export function properties<T>(
       const propCtx: ValidationContext<any> = {
         field: joinIds(ctx.field || '', key),
         value: ctx.value[key],
+        options: ctx.options,
       };
 
       // validate
@@ -83,7 +86,7 @@ export function properties<T>(
       if (result.length) {
         // append validation errors
         errors = [...errors, ...result];
-      } else {
+      } else if (!noCoerce) {
         // reassign incase value has been coalesced.
         ctx.value[key] = <any>propCtx.value;
       }

@@ -23,6 +23,12 @@ export interface ValidationError {
 export interface ValidationContext<T> {
   field?: string;
   value: T;
+  options?: {
+    json?: boolean;
+    noCoerce?: boolean;
+    arraySplit?: string;
+    permissive?: boolean;
+  };
 }
 
 /**
