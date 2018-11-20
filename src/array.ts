@@ -30,7 +30,7 @@ export function array<T>(elem: ValueValidator<T>): ValueValidator<T[]> {
       {
         id: ExpectedArray,
         text:
-          `expected list` + arraySplit ? ` seperated by '${arraySplit}'` : '',
+          `expected list` + (arraySplit ? ` seperated by '${arraySplit}'` : ''),
         field: ctx.field,
       },
     ];
