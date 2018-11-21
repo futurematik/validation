@@ -1,4 +1,4 @@
-import { ValueValidator } from './base';
+import { ValueValidator, ValidationError } from './base';
 
 export const ExpectedArray = 'EXPECTED_ARRAY';
 
@@ -13,13 +13,19 @@ export function array<T>(elem: ValueValidator<T>): ValueValidator<T[]> {
 
     if (!noCoerce && arraySplit && typeof value === 'string') {
       value = value.split(arraySplit);
+    } else {
+      value = value.slice();
     }
 
     if (Array.isArray(value)) {
-      const errs = value.reduce(
-        (a, x, i) => [...a, ...elem({ value: x, field: `${ctx.field}[${i}]` })],
-        [],
-      );
+      let errs: ValidationError[] = [];
+
+      for (let i = 0; i < value.length; ++i) {
+        const vctx = { value: value[i], field: `${ctx.field}[${i}]`, options };
+        errs = errs.concat(elem(vctx));
+        value[i] = vctx.value;
+      }
+
       if (!errs.length && !noCoerce) {
         // re-assign in case we split a string
         ctx.value = value;
