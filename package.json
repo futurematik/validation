@@ -1,7 +1,7 @@
 {
   "name": "@fmtk/validation",
   "private": false,
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Easy validation",
   "main": "dist/index.js",
   "repository": "https://github.com/futurematik/validation",
