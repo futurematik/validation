@@ -73,6 +73,7 @@ export function properties<T>(
     // check all properties validation
     for (let key in model) {
       const validator = model[key];
+      const exists = key in ctx.value;
 
       const propCtx: ValidationContext<any> = {
         field: joinIds(ctx.field || '', key),
@@ -86,7 +87,7 @@ export function properties<T>(
       if (result.length) {
         // append validation errors
         errors = [...errors, ...result];
-      } else if (!noCoerce) {
+      } else if (exists && !noCoerce) {
         // reassign incase value has been coalesced.
         ctx.value[key] = <any>propCtx.value;
       }
