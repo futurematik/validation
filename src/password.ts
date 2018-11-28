@@ -12,16 +12,19 @@ export function password(minScore: number = 3): ValueValidator<string> {
     const result = zxcvbn(ctx.value);
 
     if (result.score >= minScore) {
-      return [];
+      return { value: ctx.value, errors: [] };
     }
-    return [
-      {
-        id: ExpectedSecurePassword,
-        text: ctx.value ? formatPasswordResult(result) : 'required',
-        field: ctx.field,
-        extra: result,
-      },
-    ];
+    return {
+      value: ctx.value,
+      errors: [
+        {
+          id: ExpectedSecurePassword,
+          text: ctx.value ? formatPasswordResult(result) : 'required',
+          field: ctx.field,
+          extra: result,
+        },
+      ],
+    };
   };
 }
 

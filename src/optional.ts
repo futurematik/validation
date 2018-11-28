@@ -10,6 +10,6 @@ export function optional<T>(
     if (ctx.value != undefined && <any>ctx.value !== '' && validator) {
       return validator(<any>ctx);
     }
-    return [];
+    return { value: undefined, errors: [] };
   };
 }

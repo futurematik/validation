@@ -9,32 +9,35 @@ export const ExpectedDateFormat = 'EXPECTED_DATE_FORMAT';
 export function dateFormat(
   format: string | moment.MomentBuiltinFormat,
 ): ValueValidator<Date> {
-  return ctx => {
-    let options = ctx.options || {};
-    let { json, noCoerce } = options;
+  return ({ value, field, options }) => {
+    const { parse, strict } = options || { parse: false, strict: false };
 
-    if (ctx.value instanceof Date) {
-      return [];
+    if (!strict && moment.isMoment(value)) {
+      value = value.toDate();
     }
-    if (typeof ctx.value === 'string') {
-      let m = moment(ctx.value, format, true);
+    if (value instanceof Date) {
+      // a date instance is assumed to be right
+      return { value, errors: [] };
+    }
+    if (parse && typeof value === 'string') {
+      let m = moment(value, format, true);
       if (m.isValid()) {
-        if (!noCoerce && !json) {
-          ctx.value = m.toDate();
-        }
-        return [];
+        return { value: m.toDate(), errors: [] };
       }
     }
-    return [
-      {
-        id: ExpectedDateFormat,
-        text:
-          `expected a date` + typeof format === 'string'
-            ? ` with format ${format}`
-            : ``,
-        field: ctx.field,
-      },
-    ];
+    return {
+      value,
+      errors: [
+        {
+          id: ExpectedDateFormat,
+          text:
+            `expected a date` + typeof format === 'string'
+              ? ` with format ${format}`
+              : ``,
+          field: field,
+        },
+      ],
+    };
   };
 }
 

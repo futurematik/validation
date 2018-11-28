@@ -6,16 +6,19 @@ export const ExpectedValue = 'EXPECTED_VALUE';
  * Require one of a list of values.
  */
 export function is<T>(...values: T[]): ValueValidator<T> {
-  return ctx => {
-    if (values.indexOf(<T>ctx.value) >= 0) {
-      return [];
+  return ({ value, field }) => {
+    if (values.indexOf(<T>value) >= 0) {
+      return { value, errors: [] };
     }
-    return [
-      {
-        id: ExpectedValue,
-        text: `expected one of ${values}`,
-        field: ctx.field,
-      },
-    ];
+    return {
+      value,
+      errors: [
+        {
+          id: ExpectedValue,
+          text: `expected one of ${values}`,
+          field,
+        },
+      ],
+    };
   };
 }

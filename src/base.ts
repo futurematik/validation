@@ -21,10 +21,8 @@ export interface ValidationError {
  * ValidationOptions control a validation operation.
  */
 export interface ValidationOptions {
-  json?: boolean;
-  noCoerce?: boolean;
-  arraySplit?: string;
-  permissive?: boolean;
+  parse?: boolean;
+  strict?: boolean;
 }
 
 /**
@@ -37,12 +35,20 @@ export interface ValidationContext<T> {
 }
 
 /**
+ * ValidationResult describes the result from a validation operation.
+ */
+export interface ValidationResult<T> {
+  value: T;
+  errors: ValidationError[];
+}
+
+/**
  * ValueValidator is a function which validates a value and returns an error
  * object or undefined if no error found.
  */
 export type ValueValidator<T> = (
   value: ValidationContext<T>,
-) => ValidationError[];
+) => ValidationResult<T>;
 
 /**
  * Wrap a validate call to throw an error if validation errors found.
@@ -51,24 +57,16 @@ export function assertValid<T>(
   value: T,
   validator: ValueValidator<T>,
   options?: ValidationOptions & { field?: string },
-): void;
-export function assertValid(errs: ValidationError[]): void;
-export function assertValid<T>(
-  value: ValidationError[] | T,
-  validator?: ValueValidator<T>,
-  options?: ValidationOptions & { field?: string },
-) {
+): T {
   options = options || {};
   const { field, ...opts } = options;
+  const result = validator({ value: <T>value, field, options: opts });
 
-  if (validator) {
-    value = validator({ value: <T>value, field, options: opts });
-  } else if (!Array.isArray(value)) {
-    throw new Error('expected an array of validation errors');
+  if (result.errors && result.errors.length) {
+    throw new ModelValidationError(result.errors);
   }
-  if (value.length) {
-    throw new ModelValidationError(value);
-  }
+
+  return result.value;
 }
 
 /**

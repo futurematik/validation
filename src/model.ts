@@ -1,8 +1,8 @@
 import {
   ValueValidator,
-  ValidationError,
   ValidationContext,
   joinIds,
+  ValidationResult,
 } from './base';
 import { UnexpectedField } from './notProvided';
 
@@ -45,7 +45,10 @@ export function modelValidator<T>(
   return ctx =>
     extended
       .map(validator => partialProps<T>(validator(ctx.value))(ctx))
-      .reduce((a, x) => a.concat(x), baseValidator(ctx));
+      .reduce(
+        (a, x) => ({ value: x.value, errors: [...a.errors, ...x.errors] }),
+        baseValidator(ctx),
+      );
 }
 
 /**
@@ -55,49 +58,51 @@ export function properties<T>(
   model: ModelDefinition<T>,
   allowExtraFields?: boolean,
 ): ValueValidator<T> {
-  return ctx => {
-    let errors: ValidationError[] = [];
-    let options = ctx.options || {};
-    let { noCoerce } = options;
-
-    if (typeof ctx.value !== 'object') {
-      return [
-        {
-          id: ExpectedObject,
-          text: `expected object`,
-          field: ctx.field,
-        },
-      ];
+  return ({ value, field, options }) => {
+    if (typeof value !== 'object') {
+      return {
+        value,
+        errors: [
+          {
+            id: ExpectedObject,
+            text: `expected object`,
+            field,
+          },
+        ],
+      };
     }
+
+    let result: ValidationResult<T> = { value, errors: [] };
 
     // check all properties validation
     for (let key in model) {
       const validator = model[key];
-      const exists = key in ctx.value;
+      const exists = key in value;
 
       const propCtx: ValidationContext<any> = {
-        field: joinIds(ctx.field || '', key),
-        value: ctx.value[key],
-        options: ctx.options,
+        field: joinIds(field || '', key),
+        value: value[key],
+        options,
       };
 
       // validate
-      const result = validator(propCtx);
+      const propResult = validator(propCtx);
 
-      if (result.length) {
+      if (propResult.errors && propResult.errors.length) {
         // append validation errors
-        errors = [...errors, ...result];
-      } else if (exists && !noCoerce) {
-        // reassign incase value has been coalesced.
-        ctx.value[key] = <any>propCtx.value;
+        result.errors.push(...propResult.errors);
+      }
+      if (exists) {
+        // only assign if it existed in the first place
+        result.value[key] = <any>propCtx.value;
       }
     }
 
     // check for extra fields
     if (!allowExtraFields) {
-      for (let key in ctx.value) {
+      for (let key in value) {
         if (!(key in model)) {
-          errors.push({
+          result.errors.push({
             id: UnexpectedField,
             text: 'unexpected value',
             field: key,
@@ -106,7 +111,7 @@ export function properties<T>(
       }
     }
 
-    return errors;
+    return result;
   };
 }
 

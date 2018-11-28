@@ -8,23 +8,21 @@ export const UnexpectedField = 'UNEXPECTED_FIELD';
 export function notProvided(opts?: {
   strict?: boolean;
 }): ValueValidator<undefined> {
-  return ctx => {
-    const options = ctx.options || {};
-    const { noCoerce } = options;
-    const strict = opts && opts.strict;
+  return ({ value, field, options }) => {
+    const { strict } = opts || { strict: false };
 
-    if ((!strict && ctx.value == undefined) || ctx.value === undefined) {
-      if (!noCoerce) {
-        ctx.value = undefined;
-      }
-      return [];
+    if ((!strict && value == undefined) || value === undefined) {
+      return { value: undefined, errors: [] };
     }
-    return [
-      {
-        id: UnexpectedField,
-        text: 'unexpected value',
-        field: ctx.field,
-      },
-    ];
+    return {
+      value,
+      errors: [
+        {
+          id: UnexpectedField,
+          text: 'unexpected value',
+          field,
+        },
+      ],
+    };
   };
 }

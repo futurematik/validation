@@ -6,27 +6,24 @@ export const ExpectedUkMobile = 'EXPECTED_UK_MOBILE';
  * Validate a phone number and coalsece to E.164 format if valid.
  */
 export function ukmobile(): ValueValidator<string> {
-  return ctx => {
-    let options = ctx.options || {};
-    let { noCoerce } = options;
-
-    if (typeof ctx.value === 'string') {
-      const value = ctx.value.replace(/[ \.\-\(\)]/g, '');
+  return ({ value, field, options }) => {
+    if (typeof value === 'string') {
+      value = value.replace(/[ \.\-\(\)]/g, '');
       const match = value.match(/^(\+44)?0?(7[0-9]{9})$/);
 
       if (match !== null) {
-        if (!noCoerce) {
-          ctx.value = '+44' + match[2];
-        }
-        return [];
+        return { value: '+44' + match[2], errors: [] };
       }
     }
-    return [
-      {
-        id: ExpectedUkMobile,
-        text: `expected a UK mobile number`,
-        field: ctx.field,
-      },
-    ];
+    return {
+      value,
+      errors: [
+        {
+          id: ExpectedUkMobile,
+          text: `expected a UK mobile number`,
+          field,
+        },
+      ],
+    };
   };
 }

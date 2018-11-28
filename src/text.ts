@@ -11,35 +11,44 @@ export function text(
   maxLength?: number,
   minLength: number = 1,
 ): ValueValidator<string> {
-  return ctx => {
-    if (typeof ctx.value !== 'string') {
-      return [
-        {
-          id: ExpectedString,
-          text: `must be text`,
-          field: ctx.field,
-        },
-      ];
-    } else if (maxLength !== undefined && ctx.value.length > maxLength) {
-      return [
-        {
-          id: StringTooLong,
-          text: `must be ${maxLength} characters or less`,
-          field: ctx.field,
-        },
-      ];
-    } else if (minLength !== undefined && ctx.value.length < minLength) {
-      return [
-        {
-          id: StringTooShort,
-          text:
-            minLength === 1
-              ? `required`
-              : `must be at least ${minLength} characters`,
-          field: ctx.field,
-        },
-      ];
+  return ({ value, field, options }) => {
+    if (typeof value !== 'string') {
+      return {
+        value,
+        errors: [
+          {
+            id: ExpectedString,
+            text: `must be text`,
+            field,
+          },
+        ],
+      };
+    } else if (maxLength !== undefined && value.length > maxLength) {
+      return {
+        value,
+        errors: [
+          {
+            id: StringTooLong,
+            text: `must be ${maxLength} characters or less`,
+            field,
+          },
+        ],
+      };
+    } else if (minLength !== undefined && value.length < minLength) {
+      return {
+        value,
+        errors: [
+          {
+            id: StringTooShort,
+            text:
+              minLength === 1
+                ? `required`
+                : `must be at least ${minLength} characters`,
+            field,
+          },
+        ],
+      };
     }
-    return [];
+    return { value, errors: [] };
   };
 }
