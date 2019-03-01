@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && npm run lint && tsc",
-    "bump": "npm version minor && npm publish",
+    "bumpfeat": "npm version minor && npm publish",
     "bumpfix": "npm version patch && npm publish",
     "clean": "rm -rf dist/",
     "lint": "tslint --project .",
