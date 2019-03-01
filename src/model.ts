@@ -94,7 +94,7 @@ export function properties<T>(
       }
       if (exists) {
         // only assign if it existed in the first place
-        result.value[key] = <any>propCtx.value;
+        result.value[key] = propResult.value;
       }
     }
 
