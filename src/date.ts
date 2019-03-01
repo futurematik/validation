@@ -31,9 +31,8 @@ export function dateFormat(
         {
           id: ExpectedDateFormat,
           text:
-            `expected a date` + typeof format === 'string'
-              ? ` with format ${format}`
-              : ``,
+            `expected a date` +
+            (typeof format === 'string' ? ` with format ${format}` : ``),
           field: field,
         },
       ],
