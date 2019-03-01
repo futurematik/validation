@@ -92,8 +92,8 @@ export function properties<T>(
         // append validation errors
         result.errors.push(...propResult.errors);
       }
-      if (exists) {
-        // only assign if it existed in the first place
+      if (exists || propResult.value) {
+        // don't just make an explicit undefined prop
         result.value[key] = propResult.value;
       }
     }
