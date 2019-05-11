@@ -9,17 +9,21 @@ export const ExpectedSecurePassword = 'EXPECTED_SECURE_PASSWORD';
  */
 export function password(minScore: number = 3): ValueValidator<string> {
   return ctx => {
-    const result = zxcvbn(ctx.value);
+    let result: zxcvbn.ZXCVBNResult | undefined;
 
-    if (result.score >= minScore) {
-      return { value: ctx.value, errors: [] };
+    if (typeof ctx.value === 'string') {
+      result = zxcvbn(ctx.value);
+
+      if (result.score >= minScore) {
+        return { value: ctx.value, errors: [] };
+      }
     }
     return {
       value: ctx.value,
       errors: [
         {
           id: ExpectedSecurePassword,
-          text: ctx.value ? formatPasswordResult(result) : 'required',
+          text: result ? formatPasswordResult(result) : 'required',
           field: ctx.field,
           extra: result,
         },
