@@ -72,7 +72,7 @@ export function properties<T>(
       };
     }
 
-    let result: ValidationResult<T> = { value, errors: [] };
+    let result: ValidationResult<T> = { value: {} as T, errors: [] };
 
     // check all properties validation
     for (let key in model) {
