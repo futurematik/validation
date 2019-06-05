@@ -92,7 +92,7 @@ export function properties<T>(
         // append validation errors
         result.errors.push(...propResult.errors);
       }
-      if (exists || propResult.value) {
+      if (exists || typeof propResult.value !== 'undefined') {
         // don't just make an explicit undefined prop
         result.value[key] = propResult.value;
       }
