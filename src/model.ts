@@ -72,7 +72,13 @@ export function properties<T>(
       };
     }
 
-    let result: ValidationResult<T> = { value: {} as T, errors: [] };
+    // we copy the value here so that partial validators will still have all
+    // of the properties, but need to clone it so that result.value[key] later
+    // doesn't mutate the input value
+    let result: ValidationResult<T> = {
+      value: { ...(value as any) },
+      errors: [],
+    };
 
     // check all properties validation
     for (let key in model) {
