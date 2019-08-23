@@ -1,4 +1,4 @@
-import { ValueValidator } from './base';
+import { ValueValidator, ValidationResult } from '../core';
 
 export const ExpectedEmail = 'EXPECTED_EMAIL';
 
@@ -6,14 +6,14 @@ export const ExpectedEmail = 'EXPECTED_EMAIL';
  * Require an email.
  */
 export function email(): ValueValidator<string> {
-  return ({ value, field }) => {
+  return ({ value, field }): ValidationResult<string> => {
     if (typeof value === 'string') {
       if (/^[^@]+@[^@]+$/.test(value)) {
-        return { value, errors: [] };
+        return { value, ok: true };
       }
     }
     return {
-      value,
+      ok: false,
       errors: [
         {
           id: ExpectedEmail,

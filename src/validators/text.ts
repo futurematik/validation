@@ -1,4 +1,4 @@
-import { ValueValidator } from './base';
+import { ValueValidator, ValidationResult } from '../core';
 
 export const ExpectedString = 'EXPECTED_STRING';
 export const StringTooLong = 'STRING_TOO_LONG';
@@ -9,12 +9,12 @@ export const StringTooShort = 'STRING_TOO_SHORT';
  */
 export function text(
   maxLength?: number,
-  minLength: number = 1,
+  minLength = 1,
 ): ValueValidator<string> {
-  return ({ value, field, options }) => {
+  return ({ value, field }): ValidationResult<string> => {
     if (typeof value !== 'string') {
       return {
-        value,
+        ok: false,
         errors: [
           {
             id: ExpectedString,
@@ -25,7 +25,7 @@ export function text(
       };
     } else if (maxLength !== undefined && value.length > maxLength) {
       return {
-        value,
+        ok: false,
         errors: [
           {
             id: StringTooLong,
@@ -36,7 +36,7 @@ export function text(
       };
     } else if (minLength !== undefined && value.length < minLength) {
       return {
-        value,
+        ok: false,
         errors: [
           {
             id: StringTooShort,
@@ -49,6 +49,6 @@ export function text(
         ],
       };
     }
-    return { value, errors: [] };
+    return { value, ok: true };
   };
 }

@@ -1,4 +1,4 @@
-import { ValueValidator } from './base';
+import { ValueValidator, ValidationResult } from '../core';
 
 export const ExpectedValue = 'EXPECTED_VALUE';
 
@@ -6,12 +6,12 @@ export const ExpectedValue = 'EXPECTED_VALUE';
  * Require one of a list of values.
  */
 export function is<T>(...values: T[]): ValueValidator<T> {
-  return ({ value, field }) => {
-    if (values.indexOf(<T>value) >= 0) {
-      return { value, errors: [] };
+  return ({ value, field }): ValidationResult<T> => {
+    if (values.indexOf(value as T) >= 0) {
+      return { ok: true, value: value as T };
     }
     return {
-      value,
+      ok: false,
       errors: [
         {
           id: ExpectedValue,

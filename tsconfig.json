@@ -3,15 +3,14 @@
     "module": "commonjs",
     "target": "es2015",
     "moduleResolution": "node",
-    "jsx": "react",
     "noUnusedLocals": true,
     "strict": true,
     "experimentalDecorators": true,
-    "types": ["node"],
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "declaration": true,
     "declarationMap": true
   },
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
+  "exclude": ["node_modules", "lib"]
 }

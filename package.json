@@ -1,9 +1,9 @@
 {
   "name": "@fmtk/validation",
   "private": false,
-  "version": "2.1.6",
+  "version": "3.0.0",
   "description": "Easy validation",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "repository": "https://github.com/futurematik/validation",
   "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
   "license": "MIT",
@@ -11,20 +11,21 @@
     "build": "npm run clean && npm run lint && tsc",
     "bumpfeat": "npm version minor && npm publish",
     "bumpfix": "npm version patch && npm publish",
-    "clean": "rm -rf dist/",
-    "lint": "tslint --project .",
+    "bumpmajor": "npm version major && npm publish",
+    "clean": "rm -rf lib/",
+    "lint": "eslint \"src/**\"",
     "postversion": "git push --follow-tags",
     "prepare": "npm run build",
     "preversion": "npm run build"
   },
   "devDependencies": {
-    "@types/node": "^10.10.1",
-    "@types/zxcvbn": "^4.4.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.0.3"
-  },
-  "dependencies": {
-    "moment": "^2.22.2",
-    "zxcvbn": "^4.4.2"
+    "@types/node": "^12.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.3"
   }
 }
