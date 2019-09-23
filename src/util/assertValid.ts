@@ -9,7 +9,7 @@ import {
  * Wrap a validate call to throw an error if validation errors found.
  */
 export function assertValid<T>(
-  value: T,
+  value: unknown,
   validator: ValueValidator<T>,
   ctx?: Omit<ValidationContext, 'value'>,
 ): T {
