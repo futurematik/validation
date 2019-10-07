@@ -2,6 +2,7 @@ export * from './model';
 export * from './ModelDefinition';
 export * from './ModelValidationError';
 export * from './PropertyValidation';
+export * from './RootValidator';
 export * from './ValidationContext';
 export * from './ValidationError';
 export * from './ValidationMode';
