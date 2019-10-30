@@ -1,7 +1,7 @@
 {
   "name": "@fmtk/validation",
   "private": false,
-  "version": "3.3.2",
+  "version": "3.4.0",
   "description": "Easy validation",
   "main": "lib/bundle.js",
   "module": "lib/bundle.esm.js",
