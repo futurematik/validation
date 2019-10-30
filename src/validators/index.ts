@@ -3,6 +3,7 @@ export * from './any';
 export * from './array';
 export * from './bool';
 export * from './datetime';
+export * from './dictionary';
 export * from './email';
 export * from './integer';
 export * from './is';
