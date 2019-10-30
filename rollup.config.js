@@ -1,10 +1,10 @@
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@fmtk/rollup-plugin-ts';
 
 export default {
   input: './src/index.ts',
   output: [
     {
-      file: 'lib/bundle.mjs',
+      file: 'lib/bundle.esm.js',
       format: 'esm',
       sourcemap: true,
     },
@@ -15,4 +15,7 @@ export default {
     },
   ],
   plugins: [typescript()],
+  external: id => {
+    return !id.startsWith('.') && !id.startsWith('/') && !id.startsWith('\0');
+  },
 };
