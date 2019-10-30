@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@fmtk/rollup-plugin-ts@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/@fmtk/rollup-plugin-ts/-/rollup-plugin-ts-0.2.0.tgz#6bc5de63036e6118f5e425038a15921fc0a6a5c7"
-  integrity sha512-o1fL0j8wfu2sZlJAMQJgQVW+vnyoAXJ1rnbGIzxxXaeXgydbpi0TQszHOO0dfTy+YveqFImexIHPXYZil5uXXQ==
+"@fmtk/rollup-plugin-ts@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@fmtk/rollup-plugin-ts/-/rollup-plugin-ts-0.3.0.tgz#daa69d666a356a0af0e7206a0a67044315d75b86"
+  integrity sha512-w6H9BgWgS7zYv73XvrMum/6Q85Gxuz/kLsCar7fBF/q7K3h21js2FDf+5eDojQopTQ1L/DH8ZqWVJU9GI/CVdA==
   dependencies:
     debug "^4.1.1"
     lodash.merge "^4.6.2"
