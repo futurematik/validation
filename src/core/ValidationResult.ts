@@ -1,14 +1,18 @@
 import { ValidationError } from './ValidationError';
 
+export interface ValidationValidResult<T> {
+  ok: true;
+  value: T;
+}
+
+export interface ValidationInvalidResult {
+  ok: false;
+  errors: ValidationError[];
+}
+
 /**
  * ValidationResult describes the result from a validation operation.
  */
 export type ValidationResult<T> =
-  | {
-      ok: false;
-      errors: ValidationError[];
-    }
-  | {
-      ok: true;
-      value: T;
-    };
+  | ValidationValidResult<T>
+  | ValidationInvalidResult;

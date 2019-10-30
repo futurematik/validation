@@ -1,4 +1,4 @@
-import { ValidationResult, ValidationError } from '../core';
+import { ValidationInvalidResult, ValidationError } from '../core';
 import { joinIds } from './joinIds';
 
 export function invalidResult(
@@ -6,7 +6,7 @@ export function invalidResult(
   text: string,
   field?: string,
   ...subFields: string[]
-): ValidationResult<{}> {
+): ValidationInvalidResult {
   const error: ValidationError = { id, text, field };
   if (!subFields || !subFields.length) {
     return {
