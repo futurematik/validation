@@ -138,10 +138,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@fmtk/rollup-plugin-ts@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@fmtk/rollup-plugin-ts/-/rollup-plugin-ts-0.3.0.tgz#daa69d666a356a0af0e7206a0a67044315d75b86"
-  integrity sha512-w6H9BgWgS7zYv73XvrMum/6Q85Gxuz/kLsCar7fBF/q7K3h21js2FDf+5eDojQopTQ1L/DH8ZqWVJU9GI/CVdA==
+"@fmtk/rollup-plugin-ts@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/@fmtk/rollup-plugin-ts/-/rollup-plugin-ts-0.3.2.tgz#c13e8490b196ace003e2a4137b0063cd058548fb"
+  integrity sha512-QNMsI7Oby67gUahlPnejiUVpujogKJiHmA2EuxbWXZUAmxI991yEmGrBt6UaS6zTzicljLdNMo6EoovFmwDZWQ==
   dependencies:
     debug "^4.1.1"
     lodash.merge "^4.6.2"
@@ -3348,10 +3348,10 @@ rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^1.23.1:
-  version "1.23.1"
-  resolved "https://registry.npmjs.org/rollup/-/rollup-1.23.1.tgz#0315a0f5d0dfb056e6363e1dff05b89ac2da6b8e"
-  integrity sha512-95C1GZQpr/NIA0kMUQmSjuMDQ45oZfPgDBcN0yZwBG7Kee//m7H68vgIyg+SPuyrTZ5PrXfyLK80OzXeKG5dAA==
+rollup@^1.26.4:
+  version "1.26.4"
+  resolved "https://registry.npmjs.org/rollup/-/rollup-1.26.4.tgz#9c9ec8a30b5ddec124060556ac7147cc22a24ac5"
+  integrity sha512-faL58wTzZM+AH9mUSoncJEjUqvj5KSa4GpNkfn7mxdeBci5GOyT4i1K5+5+6vTfV68QGREh2xi4rW/l+0UFUAw==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"
