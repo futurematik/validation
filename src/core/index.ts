@@ -1,3 +1,4 @@
+export * from './ExtraFieldsMode';
 export * from './model';
 export * from './ModelDefinition';
 export * from './ModelValidationError';

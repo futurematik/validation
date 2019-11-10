@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationMap": true,
+    "esModuleInterop": true,
     "importHelpers": true,
     "lib": ["es2015"],
     "module": "es2015",

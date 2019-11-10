@@ -6,6 +6,7 @@ import {
   ValidationError,
   ValueValidator,
   ValidationResult,
+  ExtraFieldsMode,
 } from '../core';
 
 export const ExpectedObject = 'EXPECTED_OBJECT';
@@ -15,9 +16,9 @@ export const ExpectedObject = 'EXPECTED_OBJECT';
  */
 export function properties<T>(
   model: PropertyValidation<T>,
-  allowExtraFields?: boolean,
+  allowExtraFields?: boolean | ExtraFieldsMode,
 ): ValueValidator<T> {
-  return ({ value, field, mode }): ValidationResult<T> => {
+  return ({ value, field, ...ctx }): ValidationResult<T> => {
     if (typeof value !== 'object' || value === null) {
       return {
         ok: false,
@@ -31,10 +32,20 @@ export function properties<T>(
       };
     }
 
-    // we copy the value here so that partial validators will still have all
-    // of the properties, but need to clone it so that parsed[key] later
-    // doesn't mutate the input value
-    const parsed = { ...value } as T;
+    let extraFieldsMode = ctx.extraFields || ExtraFieldsMode.Fail;
+
+    if (typeof allowExtraFields !== 'undefined') {
+      if (typeof allowExtraFields === 'boolean') {
+        extraFieldsMode = allowExtraFields
+          ? ExtraFieldsMode.Include
+          : ExtraFieldsMode.Fail;
+      } else {
+        extraFieldsMode = allowExtraFields;
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const parsed = {} as any;
 
     if (typeof model === 'function') {
       model = model((value as unknown) as T);
@@ -42,47 +53,64 @@ export function properties<T>(
 
     let anyErrors = false;
     const errors: ValidationError[] = [];
+    const props = keys(value, model);
 
     // check all properties validation
-    for (const key in model) {
-      const validator = model[key];
-      const exists = key in value;
+    for (const key of props) {
+      if (key in model) {
+        const validator = model[key as keyof T];
+        const exists = key in value;
 
-      const propCtx: ValidationContext = {
-        field: joinIds(field || '', key),
-        value: ((value as unknown) as T)[key],
-        mode,
-      };
+        const propCtx: ValidationContext = {
+          ...ctx,
+          field: joinIds(field || '', key),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          value: (value as any)[key],
+        };
 
-      // validate
-      const propResult = validator(propCtx);
+        // validate
+        const propResult = validator(propCtx);
 
-      if (!propResult.ok) {
-        anyErrors = true;
-        errors.push(...propResult.errors);
-      } else if (exists || typeof propResult.value !== 'undefined') {
-        // don't just make an explicit undefined prop
-        parsed[key] = propResult.value;
-      }
-    }
+        if (!propResult.ok) {
+          anyErrors = true;
+          errors.push(...propResult.errors);
+        } else if (exists || typeof propResult.value !== 'undefined') {
+          // don't just make an explicit undefined prop
+          parsed[key] = propResult.value;
+        }
+      } else {
+        // extra field
+        switch (extraFieldsMode) {
+          case ExtraFieldsMode.Fail:
+            anyErrors = true;
+            errors.push({
+              id: UnexpectedField,
+              text: 'unexpected value',
+              field: key,
+            });
+            break;
 
-    // check for extra fields
-    if (!allowExtraFields) {
-      for (const key in value) {
-        if (!(key in model)) {
-          errors.push({
-            id: UnexpectedField,
-            text: 'unexpected value',
-            field: key,
-          });
+          case ExtraFieldsMode.Ignore:
+            break;
+
+          case ExtraFieldsMode.Include:
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            parsed[key] = (value as any)[key];
+            break;
         }
       }
     }
 
-    if (anyErrors) {
+    if (anyErrors || errors.length) {
       return { ok: false, errors };
     } else {
       return { ok: true, value: parsed };
     }
   };
+}
+
+function keys(...objects: object[]): string[] {
+  return objects
+    .reduce((a: string[], x) => a.concat(Object.keys(x)), [])
+    .reduce((a: string[], x) => (a.indexOf(x) < 0 ? a.concat(x) : a), []);
 }
