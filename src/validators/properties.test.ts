@@ -209,6 +209,54 @@ describe('properties', () => {
     }
   });
 
+  it('ignores extra fields in sub validators if extraFields is Ignore', () => {
+    const value = {
+      child: { one: 1, two: 2, extra1: 'a', extra2: 'b' },
+    };
+
+    const validator = properties({
+      child: properties({ one: integer(), two: integer() }),
+    });
+
+    const result = validator({
+      value,
+      mode: ValidationMode.Strict,
+      extraFields: ExtraFieldsMode.Ignore,
+    });
+
+    expect(result.ok).toBe(true);
+
+    if (result.ok) {
+      expect(result.value).toEqual({
+        child: { one: 1, two: 2 },
+      });
+    }
+  });
+
+  it('includes extra fields in sub validators if extraFields is Include', () => {
+    const value = {
+      child: { one: 1, two: 2, extra1: 'a', extra2: 'b' },
+    };
+
+    const validator = properties({
+      child: properties({ one: integer(), two: integer() }),
+    });
+
+    const result = validator({
+      value,
+      mode: ValidationMode.Strict,
+      extraFields: ExtraFieldsMode.Include,
+    });
+
+    expect(result.ok).toBe(true);
+
+    if (result.ok) {
+      expect(result.value).toEqual({
+        child: { one: 1, two: 2, extra1: 'a', extra2: 'b' },
+      });
+    }
+  });
+
   it('rejects extra fields if allowExtraFields is Fail', () => {
     const value = {
       one: 1,
