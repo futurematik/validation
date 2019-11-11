@@ -25,9 +25,9 @@ export function dictionary<K extends string, V>(
 
       if (validateKey) {
         const keyResult = validateKey({
+          ...ctx,
           value: key,
           field: joinIds(field, `[${key}]`),
-          ...ctx,
         });
 
         if (keyResult.ok) {
@@ -39,9 +39,9 @@ export function dictionary<K extends string, V>(
       }
 
       const propResult = validateValue({
+        ...ctx,
         value: dict[key],
         field: joinIds(field, key),
-        ...ctx,
       });
       if (propResult.ok) {
         result[parsedKey] = propResult.value;

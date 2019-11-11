@@ -6,12 +6,12 @@ import { ValueValidator, ValidationError, ValidationResult } from '../core';
 export function and<T = {}>(
   ...validators: ValueValidator<T>[]
 ): ValueValidator<T> {
-  return ({ value, field, mode }): ValidationResult<T> => {
+  return ({ value, ...ctx }): ValidationResult<T> => {
     let anyError = false;
     const errors: ValidationError[] = [];
 
     for (const validator of validators) {
-      const result = validator({ value, field, mode });
+      const result = validator({ ...ctx, value });
 
       if (result.ok) {
         value = result.value;

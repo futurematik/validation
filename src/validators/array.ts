@@ -14,8 +14,8 @@ export function array<T>(
   elem: ValueValidator<T>,
   arraySplit?: string,
 ): ValueValidator<T[]> {
-  return ({ value, field, mode }): ValidationResult<T[]> => {
-    if (mode === ValidationMode.String) {
+  return ({ value, field, ...ctx }): ValidationResult<T[]> => {
+    if (ctx.mode === ValidationMode.String) {
       if (typeof value === 'string') {
         value = value.split(arraySplit || ',').map(x => x.trim());
       }
@@ -28,9 +28,9 @@ export function array<T>(
 
       for (let i = 0; i < value.length; ++i) {
         const subctx = {
+          ...ctx,
           value: value[i],
           field: `${field}[${i}]`,
-          mode,
         };
         const subresult = elem(subctx);
 
