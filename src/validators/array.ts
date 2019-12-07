@@ -30,7 +30,7 @@ export function array<T>(
         const subctx = {
           ...ctx,
           value: value[i],
-          field: `${field}[${i}]`,
+          field: `${field || ''}[${i}]`,
         };
         const subresult = elem(subctx);
 

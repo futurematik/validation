@@ -63,7 +63,7 @@ export function properties<T>(
 
         const propCtx: ValidationContext = {
           ...ctx,
-          field: joinIds(field || '', key),
+          field: joinIds(field, key),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           value: (value as any)[key],
         };
@@ -86,7 +86,7 @@ export function properties<T>(
             errors.push({
               id: UnexpectedField,
               text: 'unexpected value',
-              field: key,
+              field: joinIds(field, key),
             });
             break;
 

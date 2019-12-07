@@ -27,7 +27,7 @@ export function dictionary<K extends string, V>(
         const keyResult = validateKey({
           ...ctx,
           value: key,
-          field: joinIds(field, `[${key}]`),
+          field: `${field || ''}[${key}]`,
         });
 
         if (keyResult.ok) {
