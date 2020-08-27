@@ -127,7 +127,7 @@ Creates a validator that requires at least one of the supplied validators to be 
 
 ### `and(...validators: ValueValidator<T>)`
 
-Creates a validator that requries all supplied validators to be valid.
+Creates a validator that requires all supplied validators to be valid.
 
 ### `dateFormat(format: string | moment.MomentBuiltinFormat)`
 
@@ -143,17 +143,15 @@ Require an email address.
 
 Expects a string to match the following regex: `/^[^@]+@[^@]+$/`
 
-### `integer()`
+### `integer(opts?: { minValue?: number, maxValue?: number })`
 
-Require an integer value.
-
-If `ValidationOptions.parse` is `true` the number is parsed from a string if applicable.
+Require an integer value. The options `minValue` and `maxValue` are inclusive.
 
 ### `is(...values: T[])`
 
 Require one of a list of values.
 
-### `notProvided(opts: {string?: boolean})`
+### `notProvided(opts: { string?: boolean })`
 
 Require a value not to be present.
 
@@ -165,7 +163,7 @@ Make a value optional.
 
 Validate a password against a complexity score.
 
-`minScore` shoul dbe between 0 and 4 inclusive.
+`minScore` should be between 0 and 4 inclusive.
 
 ### `real()`
 
