@@ -59,7 +59,10 @@ describe('dictionary', () => {
       three: 3,
     };
 
-    const result = dictionary(integer(), lowercase())({
+    const result = dictionary(
+      integer(),
+      lowercase(),
+    )({
       value,
       mode: ValidationMode.Strict,
       field: 'somefield',
