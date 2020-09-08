@@ -10,7 +10,7 @@
   "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
   "license": "MIT",
   "scripts": {
-    "build": "npm run clean && npm run lint && npm run compile",
+    "build": "yarn clean && yarn lint && yarn compile && yarn test",
     "bumpfeat": "npm version minor && npm publish",
     "bumpfix": "npm version patch && npm publish",
     "bumpmajor": "npm version major && npm publish",
@@ -18,8 +18,9 @@
     "compile": "rollup -c",
     "lint": "eslint \"src/**\"",
     "postversion": "git push --follow-tags",
-    "prepare": "npm run build",
-    "preversion": "npm run build"
+    "prepare": "yarn build",
+    "preversion": "yarn build",
+    "test": "jest"
   },
   "devDependencies": {
     "@fmtk/rollup-plugin-ts": "^0.3.2",
